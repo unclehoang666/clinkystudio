@@ -1,27 +1,35 @@
-import { useState, useEffect } from 'react'
-import axios from 'axios'
-import './App.css'
+import { Routes, Route } from 'react-router-dom';
+import LoginPage from './pages/LoginPage';
+import RegisterPage from './pages/RegisterPage';
+import { useAuth } from './contexts/AuthContext';
 
-function App() {
-  const [message, setMessage] = useState('')
-
-  useEffect(() => {
-    axios.get('http://localhost:8080/api/hello')
-      .then(response => {
-        setMessage(response.data)
-      })
-      .catch(error => {
-        console.error('Lỗi gọi API:', error)
-        setMessage('Không kết nối được backend')
-      })
-  }, [])
-
+function HomePage() {
+  const { user, logout } = useAuth();
   return (
-    <div>
-      <h1>Test kết nối Frontend - Backend</h1>
-      <p>{message}</p>
+    <div style={{ maxWidth: 600, margin: '80px auto', padding: 24 }}>
+      <h1>Trang chủ Clicky</h1>
+      {user ? (
+        <div>
+          <p>
+            Xin chào, <strong>{user.username}</strong> ({user.role})
+          </p>
+          <button onClick={logout}>Đăng xuất</button>
+        </div>
+      ) : (
+        <p>Bạn chưa đăng nhập.</p>
+      )}
     </div>
-  )
+  );
 }
 
-export default App
+function App() {
+  return (
+    <Routes>
+      <Route path="/" element={<HomePage />} />
+      <Route path="/login" element={<LoginPage />} />
+      <Route path="/register" element={<RegisterPage />} />
+    </Routes>
+  );
+}
+
+export default App;
