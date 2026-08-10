@@ -43,9 +43,14 @@ export default function Header() {
               Đơn hàng của tôi
             </Link>
             {user?.role === 'ADMIN' && (
-              <Link to="/admin" style={{ textDecoration: 'none', color: '#c0392b', fontWeight: 600 }}>
-                Quản trị
-              </Link>
+              <>
+                <Link to="/pos" style={{ textDecoration: 'none', color: '#333', fontWeight: 600 }}>
+                  POS
+                </Link>
+                <Link to="/admin" style={{ textDecoration: 'none', color: '#c0392b', fontWeight: 600 }}>
+                  Quản trị
+                </Link>
+              </>
             )}
             <span style={{ color: '#666' }}>Xin chào, {user?.username}</span>
             <button onClick={handleLogout} style={{ padding: '6px 12px', cursor: 'pointer' }}>

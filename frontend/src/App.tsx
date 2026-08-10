@@ -9,6 +9,7 @@ import CheckoutPage from './pages/CheckoutPage';
 import OrderSuccessPage from './pages/OrderSuccessPage';
 import MyOrdersPage from './pages/MyOrdersPage';
 import OrderDetailPage from './pages/OrderDetailPage';
+import PosPage from './pages/PosPage';
 import { useAuth } from './contexts/AuthContext';
 
 function HomePage() {
@@ -39,6 +40,7 @@ function App() {
         <Route path="/order-success/:id" element={<OrderSuccessPage />} />
         <Route path="/my-orders" element={<MyOrdersPage />} />
         <Route path="/orders/:id" element={<OrderDetailPage />} />
+        <Route path="/pos" element={<PosPage />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<RegisterPage />} />
       </Route>
