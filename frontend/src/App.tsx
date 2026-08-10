@@ -1,20 +1,25 @@
 import { Routes, Route } from 'react-router-dom';
+import Layout from './components/Layout';
 import LoginPage from './pages/LoginPage';
 import RegisterPage from './pages/RegisterPage';
+import ProductListPage from './pages/ProductListPage';
+import ProductDetailPage from './pages/ProductDetailPage';
+import CartPage from './pages/CartPage';
+import CheckoutPage from './pages/CheckoutPage';
+import OrderSuccessPage from './pages/OrderSuccessPage';
+import MyOrdersPage from './pages/MyOrdersPage';
+import OrderDetailPage from './pages/OrderDetailPage';
 import { useAuth } from './contexts/AuthContext';
 
 function HomePage() {
-  const { user, logout } = useAuth();
+  const { user } = useAuth();
   return (
     <div style={{ maxWidth: 600, margin: '80px auto', padding: 24 }}>
       <h1>Trang chủ Clicky</h1>
       {user ? (
-        <div>
-          <p>
-            Xin chào, <strong>{user.username}</strong> ({user.role})
-          </p>
-          <button onClick={logout}>Đăng xuất</button>
-        </div>
+        <p>
+          Xin chào, <strong>{user.username}</strong> ({user.role})
+        </p>
       ) : (
         <p>Bạn chưa đăng nhập.</p>
       )}
@@ -25,9 +30,18 @@ function HomePage() {
 function App() {
   return (
     <Routes>
-      <Route path="/" element={<HomePage />} />
-      <Route path="/login" element={<LoginPage />} />
-      <Route path="/register" element={<RegisterPage />} />
+      <Route element={<Layout />}>
+        <Route path="/" element={<HomePage />} />
+        <Route path="/products" element={<ProductListPage />} />
+        <Route path="/products/:id" element={<ProductDetailPage />} />
+        <Route path="/cart" element={<CartPage />} />
+        <Route path="/checkout" element={<CheckoutPage />} />
+        <Route path="/order-success/:id" element={<OrderSuccessPage />} />
+        <Route path="/my-orders" element={<MyOrdersPage />} />
+        <Route path="/orders/:id" element={<OrderDetailPage />} />
+        <Route path="/login" element={<LoginPage />} />
+        <Route path="/register" element={<RegisterPage />} />
+      </Route>
     </Routes>
   );
 }
