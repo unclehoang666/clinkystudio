@@ -10,6 +10,11 @@ import OrderSuccessPage from './pages/OrderSuccessPage';
 import MyOrdersPage from './pages/MyOrdersPage';
 import OrderDetailPage from './pages/OrderDetailPage';
 import PosPage from './pages/PosPage';
+import AdminLayout from './pages/admin/AdminLayout';
+import AdminOrdersPage from './pages/admin/AdminOrdersPage';
+import AdminCategoriesPage from './pages/admin/AdminCategoriesPage';
+import AdminBrandsPage from './pages/admin/AdminBrandsPage';
+import AdminProductsPage from './pages/admin/AdminProductsPage';
 import { useAuth } from './contexts/AuthContext';
 
 function HomePage() {
@@ -41,6 +46,13 @@ function App() {
         <Route path="/my-orders" element={<MyOrdersPage />} />
         <Route path="/orders/:id" element={<OrderDetailPage />} />
         <Route path="/pos" element={<PosPage />} />
+
+        <Route path="/admin" element={<AdminLayout />}>
+          <Route path="orders" element={<AdminOrdersPage />} />
+          <Route path="products" element={<AdminProductsPage />} />
+          <Route path="categories" element={<AdminCategoriesPage />} />
+          <Route path="brands" element={<AdminBrandsPage />} />
+        </Route>
         <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<RegisterPage />} />
       </Route>

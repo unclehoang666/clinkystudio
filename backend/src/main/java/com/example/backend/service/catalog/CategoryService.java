@@ -28,6 +28,18 @@ public class CategoryService {
         return "CAT" + UUID.randomUUID().toString().substring(0, 6).toUpperCase();
     }
 
+    private String generateSlug(String name) {
+        String slug = java.text.Normalizer.normalize(name, java.text.Normalizer.Form.NFD)
+                .replaceAll("\\p{InCombiningDiacriticalMarks}+", "")
+                .replace('đ', 'd').replace('Đ', 'D')
+                .toLowerCase()
+                .replaceAll("[^a-z0-9\\s-]", "")
+                .trim()
+                .replaceAll("\\s+", "-");
+        // Them hau to random de dam bao khong trung nhau ngay ca khi ten giong het
+        return slug + "-" + UUID.randomUUID().toString().substring(0, 6);
+    }
+
     public Page<Category> search(String q, Boolean status, int page, int size) {
         Pageable pageable = PageRequest.of(page, size, Sort.by("id").descending());
         return categoryRepository.search(q, status, pageable);
@@ -72,6 +84,7 @@ public class CategoryService {
         Category entity = new Category();
         entity.setCode(code);
         entity.setName(name);
+        entity.setSlug(generateSlug(name));
         entity.setDescription(req.getDescription());
         entity.setStatus(req.getStatus() != null ? req.getStatus() : true);
         entity.setCreatedAt(LocalDateTime.now());

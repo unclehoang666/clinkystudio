@@ -40,6 +40,17 @@ public class ProductService {
         return "SP" + UUID.randomUUID().toString().substring(0, 6).toUpperCase();
     }
 
+    private String generateSlug(String name) {
+        String slug = java.text.Normalizer.normalize(name, java.text.Normalizer.Form.NFD)
+                .replaceAll("\\p{InCombiningDiacriticalMarks}+", "")
+                .replace('đ', 'd').replace('Đ', 'D')
+                .toLowerCase()
+                .replaceAll("[^a-z0-9\\s-]", "")
+                .trim()
+                .replaceAll("\\s+", "-");
+        return slug + "-" + UUID.randomUUID().toString().substring(0, 6);
+    }
+
     public Page<Product> search(String q, Integer categoryId, Integer brandId, Boolean status, int page, int size) {
         Pageable pageable = PageRequest.of(page, size, Sort.by("id").descending());
         return productRepository.search(q, categoryId, brandId, status, pageable);
@@ -81,6 +92,7 @@ public class ProductService {
         Product product = new Product();
         product.setCode(code);
         product.setName(name);
+        product.setSlug(generateSlug(name));
         product.setDescription(req.getDescription());
         product.setMetaTitle(req.getMetaTitle());
         product.setMetaDescription(req.getMetaDescription());
