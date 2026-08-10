@@ -3,6 +3,7 @@ package com.example.backend.service.catalog;
 import com.example.backend.dto.catalog.BrandRequest;
 import com.example.backend.entity.catalog.Brand;
 import com.example.backend.repository.catalog.BrandRepository;
+import com.example.backend.repository.product.ProductRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -21,6 +22,7 @@ import java.util.UUID;
 public class BrandService {
 
     private final BrandRepository brandRepository;
+    private final ProductRepository productRepository;
 
     private String generateCode() {
         return "BR" + UUID.randomUUID().toString().substring(0, 6).toUpperCase();
@@ -90,7 +92,10 @@ public class BrandService {
 
     public void toggleStatus(Integer id) {
         Brand entity = getById(id);
-        // TODO: khi co ProductRepository, them check khong cho tat neu con san pham dang dung thuong hieu nay
+        if (Boolean.TRUE.equals(entity.getStatus()) && productRepository.existsByBrand_IdAndStatusTrue(id)) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
+                    "Không thể ngừng hoạt động! Đang có sản phẩm thuộc thương hiệu này đang được bày bán.");
+        }
         entity.setStatus(!entity.getStatus());
         entity.setUpdatedAt(LocalDateTime.now());
         brandRepository.save(entity);

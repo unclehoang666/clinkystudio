@@ -44,6 +44,9 @@ public class Product {
     @Column(nullable = false)
     private Boolean status = true;
 
+    @Column(name = "is_giveaway", nullable = false)
+    private Boolean isGiveaway = false;   // true = hang tri an/qua tang, khong ban thu tien
+
     @Column(name = "created_at", updatable = false)
     private LocalDateTime createdAt = LocalDateTime.now();
 

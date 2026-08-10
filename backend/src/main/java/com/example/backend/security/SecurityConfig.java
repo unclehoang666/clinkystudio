@@ -46,8 +46,12 @@ public class SecurityConfig {
             .authorizeHttpRequests(auth -> auth
                 .requestMatchers("/api/auth/**").permitAll()
                 .requestMatchers("/api/hello").permitAll()
+                .requestMatchers("/api/categories/**").permitAll()
+                .requestMatchers("/api/attributes/**").permitAll()
+                .requestMatchers("/api/attributes-values/**").permitAll()
+                .requestMatchers("/api/purchase-orders/**").permitAll()
                 .requestMatchers("/api/admin/**").hasAuthority("ADMIN")
-                .anyRequest().authenticated()
+                .anyRequest().authenticated()   // <-- categories rơi vào đây, yêu cầu phải đăng nhập
             )
             .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
 

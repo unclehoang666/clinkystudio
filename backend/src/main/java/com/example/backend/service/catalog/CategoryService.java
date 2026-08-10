@@ -3,6 +3,7 @@ package com.example.backend.service.catalog;
 import com.example.backend.dto.catalog.CategoryRequest;
 import com.example.backend.entity.catalog.Category;
 import com.example.backend.repository.catalog.CategoryRepository;
+import com.example.backend.repository.product.ProductRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -21,6 +22,7 @@ import java.util.UUID;
 public class CategoryService {
 
     private final CategoryRepository categoryRepository;
+    private final ProductRepository productRepository;
 
     private String generateCode() {
         return "CAT" + UUID.randomUUID().toString().substring(0, 6).toUpperCase();
@@ -107,7 +109,10 @@ public class CategoryService {
 
     public void toggleStatus(Integer id) {
         Category entity = getById(id);
-        // TODO: khi co ProductRepository, them check khong cho tat neu con san pham dang dung danh muc nay
+        if (Boolean.TRUE.equals(entity.getStatus()) && productRepository.existsByCategory_IdAndStatusTrue(id)) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
+                    "Không thể ngừng hoạt động! Đang có sản phẩm thuộc danh mục này đang được bày bán.");
+        }
         entity.setStatus(!entity.getStatus());
         entity.setUpdatedAt(LocalDateTime.now());
         categoryRepository.save(entity);
