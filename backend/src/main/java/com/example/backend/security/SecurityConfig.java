@@ -56,7 +56,6 @@ public class SecurityConfig {
                 .requestMatchers(HttpMethod.GET, "/api/attribute-values/**").permitAll()
                 .requestMatchers(HttpMethod.GET, "/api/category-attributes/**").permitAll()
                 .requestMatchers(HttpMethod.GET, "/api/products/**").permitAll()
-                .requestMatchers(HttpMethod.GET, "/api/reviews/**").permitAll()
 
                 // Sua/xoa (POST, PUT, PATCH, DELETE) cac danh muc quan tri -> chi ADMIN
                 .requestMatchers(HttpMethod.POST, "/api/categories/**").hasAuthority("ADMIN")
@@ -102,6 +101,25 @@ public class SecurityConfig {
                 // /api/employees/me va /api/positions (GET) - ai dang nhap cung xem duoc, roi vao anyRequest() ben duoi
 
                 .requestMatchers("/api/admin/**").hasAuthority("ADMIN")
+
+                // Review: xem (GET) public cho ai cung xem duoc, gui/sua danh gia can dang nhap, tra loi chi ADMIN/STAFF
+                .requestMatchers(HttpMethod.GET, "/api/reviews/product/**").permitAll()
+                .requestMatchers(HttpMethod.POST, "/api/reviews/*/reply").hasAnyAuthority("ADMIN", "STAFF")
+                // POST /api/reviews (tao moi), PUT/DELETE (sua/xoa cua chinh minh) -> chi can dang nhap, roi vao anyRequest()
+
+                // Promotion: xem (GET) public de hien thi khuyen mai cho khach, con lai chi ADMIN
+                .requestMatchers(HttpMethod.GET, "/api/promotions/**").permitAll()
+                .requestMatchers(HttpMethod.GET, "/api/promotion-products/**").permitAll()
+                .requestMatchers(HttpMethod.POST, "/api/promotions/**").hasAuthority("ADMIN")
+                .requestMatchers(HttpMethod.PUT, "/api/promotions/**").hasAuthority("ADMIN")
+                .requestMatchers(HttpMethod.PATCH, "/api/promotions/**").hasAuthority("ADMIN")
+                .requestMatchers(HttpMethod.POST, "/api/promotion-products/**").hasAuthority("ADMIN")
+                .requestMatchers(HttpMethod.DELETE, "/api/promotion-products/**").hasAuthority("ADMIN")
+
+                // Return request: xu ly (duyet/tu choi) chi ADMIN/STAFF, xem toan bo chi ADMIN/STAFF
+                .requestMatchers(HttpMethod.PATCH, "/api/return-requests/*/process").hasAnyAuthority("ADMIN", "STAFF")
+                .requestMatchers(HttpMethod.GET, "/api/return-requests").hasAnyAuthority("ADMIN", "STAFF")
+                // POST (tao yeu cau) va /my-requests -> chi can dang nhap, roi vao anyRequest()
 
                 // Con lai (Cart, checkout, my-orders...) - chi can dang nhap, khong phan biet role
                 .anyRequest().authenticated()

@@ -23,6 +23,7 @@ import AdminCustomersPage from './pages/admin/AdminCustomersPage';
 import AdminDashboardPage from './pages/admin/AdminDashboardPage';
 import ProfilePage from './pages/ProfilePage';
 import { useAuth } from './contexts/AuthContext';
+import WishlistPage from './pages/WishlistPage';
 
 function HomePage() {
   const { user } = useAuth();
@@ -54,6 +55,7 @@ function App() {
         <Route path="/orders/:id" element={<OrderDetailPage />} />
         <Route path="/pos" element={<PosPage />} />
         <Route path="/profile" element={<ProfilePage />} />
+        <Route path="/wishlist" element={<WishlistPage />} />
 
         <Route path="/admin" element={<AdminLayout />}>
           <Route index element={<AdminDashboardPage />} />
