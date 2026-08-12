@@ -42,6 +42,9 @@ export default function Header() {
             <Link to="/my-orders" style={{ textDecoration: 'none', color: '#333' }}>
               Đơn hàng của tôi
             </Link>
+            <Link to="/profile" style={{ textDecoration: 'none', color: '#333' }}>
+              Tài khoản
+            </Link>
             {user?.role === 'ADMIN' && (
               <>
                 <Link to="/pos" style={{ textDecoration: 'none', color: '#333', fontWeight: 600 }}>

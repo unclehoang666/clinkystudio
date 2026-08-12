@@ -56,6 +56,7 @@ public class SecurityConfig {
                 .requestMatchers(HttpMethod.GET, "/api/attribute-values/**").permitAll()
                 .requestMatchers(HttpMethod.GET, "/api/category-attributes/**").permitAll()
                 .requestMatchers(HttpMethod.GET, "/api/products/**").permitAll()
+                .requestMatchers(HttpMethod.GET, "/api/reviews/**").permitAll()
 
                 // Sua/xoa (POST, PUT, PATCH, DELETE) cac danh muc quan tri -> chi ADMIN
                 .requestMatchers(HttpMethod.POST, "/api/categories/**").hasAuthority("ADMIN")
@@ -87,24 +88,20 @@ public class SecurityConfig {
                 .requestMatchers("/api/suppliers/**").hasAuthority("ADMIN")
                 .requestMatchers("/api/purchase-orders/**").hasAuthority("ADMIN")
 
-                // Order: cap nhat trang thai chi ADMIN, con lai (checkout, xem don cua minh) chi can dang nhap
-                .requestMatchers(HttpMethod.PATCH, "/api/orders/*/status").hasAuthority("ADMIN")
-                .requestMatchers(HttpMethod.GET, "/api/orders").hasAuthority("ADMIN")   // xem toan bo don - chi admin
+                // Order: cap nhat trang thai va xem toan bo -> ADMIN va STAFF deu duoc (nhan vien xu ly don)
+                .requestMatchers(HttpMethod.PATCH, "/api/orders/*/status").hasAnyAuthority("ADMIN", "STAFF")
+                .requestMatchers(HttpMethod.GET, "/api/orders").hasAnyAuthority("ADMIN", "STAFF")
+
+                // Quan ly nhan vien - chi ADMIN
+                .requestMatchers(HttpMethod.POST, "/api/employees/**").hasAuthority("ADMIN")
+                .requestMatchers(HttpMethod.PUT, "/api/employees/**").hasAuthority("ADMIN")
+                .requestMatchers(HttpMethod.GET, "/api/employees").hasAuthority("ADMIN")
+                .requestMatchers(HttpMethod.POST, "/api/positions/**").hasAuthority("ADMIN")
+                .requestMatchers(HttpMethod.GET, "/api/users").hasAuthority("ADMIN")
+                // /api/users/me - ai dang nhap cung dung duoc, roi vao anyRequest() ben duoi
+                // /api/employees/me va /api/positions (GET) - ai dang nhap cung xem duoc, roi vao anyRequest() ben duoi
 
                 .requestMatchers("/api/admin/**").hasAuthority("ADMIN")
-
-                .requestMatchers("/error").permitAll()
-                
-                .requestMatchers(HttpMethod.GET, "/api/reviews/**").permitAll()
-                .requestMatchers(HttpMethod.GET, "/api/promotions/**").permitAll()
-                .requestMatchers(HttpMethod.GET, "/api/promotion-products/**").permitAll()
-                .requestMatchers(HttpMethod.POST, "/api/promotions/**").hasAuthority("ADMIN")
-                .requestMatchers(HttpMethod.PUT, "/api/promotions/**").hasAuthority("ADMIN")
-                .requestMatchers(HttpMethod.PATCH, "/api/promotions/**").hasAuthority("ADMIN")
-                .requestMatchers(HttpMethod.POST, "/api/promotion-products/**").hasAuthority("ADMIN")
-                .requestMatchers(HttpMethod.DELETE, "/api/promotion-products/**").hasAuthority("ADMIN")
-                .requestMatchers(HttpMethod.PATCH, "/api/return-requests/*/process").hasAuthority("ADMIN")
-                .requestMatchers(HttpMethod.GET, "/api/return-requests").hasAuthority("ADMIN")
 
                 // Con lai (Cart, checkout, my-orders...) - chi can dang nhap, khong phan biet role
                 .anyRequest().authenticated()
